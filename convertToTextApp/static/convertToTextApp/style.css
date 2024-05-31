@@ -1,0 +1,120 @@
+*{
+margin: 0;
+padding: 0;
+background-color:#3c5da0;
+font-family: 'Roboto', sans-serif;
+}
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+    background-color: #333;
+}
+
+h1 {
+    color: #333;
+}
+
+.horizontal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.form {
+    margin: 10px;
+    display: flex;
+}
+
+.upload-label {
+    font-size: 1rem;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.custom-file-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #3f6ecf;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-right: 10px;
+    transition: transform 0.2s;
+    filter: drop-shadow(5px 5px 1px rgba(0, 0, 0, 0.25));
+}
+
+.file-input {
+    display: none;
+}
+
+.upload-btn {
+    padding: 10px 20px;
+    border: none;
+    background-color: #3f6ecf;
+    color: white;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;  
+    transition: transform 0.2s; 
+    filter: drop-shadow(5px 5px 1px rgba(0, 0, 0, 0.25));
+}
+.custom-file-btn:hover {
+    background-color: #182ab5;
+    transform: scale(1.1);
+}
+.upload-btn:hover {
+    background-color: #182ab5;
+    transform: scale(1.1);
+}
+.side-by-side {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px; /* Set a fixed height for the image container */
+    overflow: hidden; /* Ensure image does not exceed container */
+}
+
+.selected-image {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: auto; /* Center align the image horizontally */
+}
+
+.image-text-container {
+    background-color: #000000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.image-container {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.selected-image {
+    max-width: 100%;
+    height: auto;
+}
+.selected-image {
+    display: none; /* Hide the selected image preview */
+}

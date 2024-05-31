@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image to Text Converter with Translation</title>
+    <link rel="icon" type="image/x-icon" href="convertToTextApp\static\convertToTextApp\logo.jpg">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet"
+    />
+
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en' },
+                'google_translate_element'
+            );
+        }
+    </script>
+
+
+    <style>
+        /* Basic styling and responsive layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Roboto", sans-serif;
+        }
+
+        body {
+            background-image: url('background2.jfif');
+            background-repeat: no-repeat;
+            background-size: 100%;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            background-color: #666666;
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .horizontal-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .form {
+            flex: 0 0 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .form .upload-label {
+            margin-right: 10px;
+        }
+
+        .custom-file-btn,
+        .upload-btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #336699;
+            color: white;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: drop-shadow(5px 5px 1px rgba(0, 0, 0, 0.25));
+            margin-right: 10px;
+        }
+
+        .custom-file-btn:hover,
+        .upload-btn:hover {
+            background-color: #000080;
+            transform: scale(1.1);
+        }
+
+        .image-container,
+        .text-container {
+            flex-basis: 48%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #9e9c9c;
+            text-align: center;
+            color: #333;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            color: #333;
+        }
+
+        .text-output {
+            color: black;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Hide selected image preview by default */
+        .selected-image {
+            display: none;
+        }
+
+        /* Hide default file input */
+        .file-input {
+            display: none;
+        }
+
+        .speech-buttons,
+        .translation-buttons {
+            padding: 10px 20px;
+            border: none;
+            background-color: #336699;
+            color: white;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: drop-shadow(5px 5px 1px rgba(0, 0, 0, 0.25));
+            margin-left: 10px;
+        }
+
+        .speech-buttons:hover,
+        .translation-buttons:hover {
+            background-color: #000080;
+            transform: scale(1.1);
+        }
+    </style>
+
+</head>
+<body>
+<div class="container">
+    <h1>Image to Text Converter with Translation</h1>
+    <div class="horizontal-container">
+        <form class="form" action="extractText" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="image-upload" class="upload-label">Select an image:</label>
+            <button type="button" class="custom-file-btn" onclick="document.getElementById('image-upload').click()">
+                Choose Image
+            </button>
+            <input type="file" name="image" id="image-upload" accept="image/*" class="file-input"/>
+            <button type="submit" class="upload-btn">Extract Text</button>
+            <button id="speak-button" class="speech-buttons">Speak</button>
+        </form>
+
+        <div class="image-container">
+            <h2>Image Preview</h2>
+            <img id="selected-image" class="selected-image" src="#" alt="Selected Image Preview"/>
+        </div>
+
+        <div class="text-container">
+            <h2>Extracted Text</h2>
+            <div id="google_translate_element"></div>
+            <div id="text-output" class="text-output">
+                {{result}}
+            </div>
+
+            <!-- <div style="margin-top: 20px;">
+                <label for="language-dropdown">Translate to:</label>
+                <select id="language-dropdown">
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ko">Korean</option>
+                </select>
+                <button id="translate-button" class="translation-buttons">Translate</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+<script>
+    // Event listener for image preview
+    document.getElementById("image-upload").addEventListener("change", function () {
+        const file = this.files[0];
+        const selectedImage = document.getElementById("selected-image");
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+                selectedImage.style.display = "block"; // Show the selected image preview
+            };
+            reader.readAsDataURL(file);
+        } else {
+            selectedImage.style.display = "none"; // Hide the selected image preview
+        }
+    });
+
+    // Re-initialize Google Translate after content changes
+    function initializeGoogleTranslate() {
+        googleTranslateElementInit(); // Re-initialize the Google Translate element
+    }
+
+    // Re-initialize Google Translate after extracting text
+    // You can call this function when you get the response from the backend or after a content update
+    initializeGoogleTranslate(); 
+
+    // Speech synthesis for the Speak button
+    const textOutput = document.getElementById("text-output"); 
+    const speakButton = document.getElementById("speak-button"); 
+
+    speakButton.addEventListener("click", () => {
+        const text = textOutput.innerText; 
+
+        if ("speechSynthesis" in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1; 
+            utterance.pitch = 1; 
+            utterance.volume = 1; 
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert("Speech synthesis is not supported in this browser.");
+        }
+    });
+
+</script>
+
+
+</body>
+</html>
