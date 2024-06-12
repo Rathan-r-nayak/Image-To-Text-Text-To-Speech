@@ -12,3 +12,6 @@
 
 ![alt text](<Screenshot 2024-05-31 131517.png>)
 
+
+## ppt
+https://docs.google.com/presentation/d/1nvrSAVww_6gWzpl9gyOncPwxpPt0xJhGTbcNTLcS_zU/edit#slide=id.g2d211f809ec_2_87
